@@ -1,0 +1,40 @@
+.container {
+  max-width: 100%; /* Allow full width for smaller screens */
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly; /* Distribute cards evenly */
+}
+
+.city-card {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 0 10px 20px 10px; /* Adjust spacing between cards */
+  text-align: center;
+  width: calc(50% - 20px); /* Adjust width for two cards per row */ /* Responsive sizing */
+}
+
+.city-card h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.city-card p {
+  margin-bottom: 5px;
+}
+
+.city-card img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.heading{
+  text-align: center;
+  color: cadetblue;
+}
+
+
