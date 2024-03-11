@@ -80,7 +80,7 @@ const chanceOfSnow=response.data.forecast.forecastday[0].day.daily_chance_of_sno
       },
       token: token[0].token
   };
-    console.log(message.data)
+    // console.log(message.data)
     const response = await admin.messaging().send(message);
     console.log('Successfully sent message:', response);
     res.send('Notification sent successfully');
