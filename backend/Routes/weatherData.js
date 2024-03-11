@@ -21,7 +21,7 @@ router.get('/weather', async (req, res) => {
     const decoded = jwt.verify(token, 'your-secret-key');
     const uuid = decoded.uuid;
 
-    const response = await axios.get(`http://api.weatherapi.com/v1/current.json?key=dc6b7772fa134eda80660624241003&q=${uuid}`);
+    const response = await axios.get(`http://api.weatherapi.com/v1/current.json?key={ENV.cloud_key}&q=${uuid}`);
 
     res.json(response.data);
   } catch (error) {
@@ -61,7 +61,7 @@ router.post('/send-notification', async (req, res) => {
 
  const token = await saveToken.find({});
 //  console.log(token[0].location)
-const response = await axios.get(`http://api.weatherapi.com/v1/forecast.json?key=dc6b7772fa134eda80660624241003&q=${token[0].location}`);
+const response = await axios.get(`http://api.weatherapi.com/v1/forecast.json?key={ENV.cloud_key}&q=${token[0].location}`);
 // console.log(response)
 // res.send(response.data.forecast.forecastday[0].day)
 const maxWindSpeed=response.data.forecast.forecastday[0].day.maxwind_mph
