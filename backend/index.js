@@ -14,10 +14,12 @@ app.get('/', cors(), async (req, res) => {
 
 const userRouter = require('./Routes/CreateUser');
 const WeatherData = require('./Routes/weatherData');
+// const saveToken = require('./Routes/notification');
 
 app.use(express.json());
 app.use('/api', userRouter);
 app.use('/api', WeatherData);
+// app.use('/api', saveToken);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

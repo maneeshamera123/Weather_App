@@ -3,30 +3,78 @@ import { useNavigate } from 'react-router-dom';
 
 import './Register.css'
 
+import { messaging } from "../firebase";
+import { getToken } from "firebase/messaging";
+
+
+
 export default function Register() {
+
+
+    async function requestPermission() {
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+            // Generating Token
+            const token = await getToken(messaging, {
+                vapidKey:
+                    "BLjO9nwe3EySJDBLwzLYdLDxvurdRomMptHGXARrttXH9vb4V3wyvs2RuknQEJ5W8HJTJSGXhUoUiGtJVo0WHjY",
+            });
+            // console.log("Token Gen", token);
+            // Send this token to your server (database)
+            sendTokenToServer(token);
+        } else if (permission === "denied") {
+            alert("You denied for the notification");
+        }
+    }
+
+
+    const [Info, setInfo] = useState({ name: "", email: "", password: "", location: "", ConfirmPassword: "" });
     const navigate = useNavigate();
-    const [Info, setInfo] = useState({ name: "", email: "", password: "", location: "", ConfirmPassword:""});
+
+    async function sendTokenToServer(token) {
+        try {
+            const response = await fetch('http://localhost:5000/api/save-token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ token , location:Info.location}),
+            });
+    
+            if (response.ok) {
+                console.log('Token sent to server successfully');
+            } else {
+                console.error('Failed to send token to server');
+            }
+        } catch (error) {
+            console.error('Error sending token to server:', error);
+        }
+    }
+    
 
     const submitHandler = async (e) => {
+
+        requestPermission();
+
         e.preventDefault();
         if (Info.password !== Info.ConfirmPassword) {
             alert("Password doesn't match")
         }
-        else{
+        else {
             const response = await fetch("http://localhost:5000/api/creatuser", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name: Info.name, email: Info.email, password: Info.password, location: Info.location})
-        });
-        const temp = await response.json();
-        // console.log(temp);
-        if (temp.success) {
-            navigate("/login");
-        } else {
-            alert("Enter valid credentials");
-        }
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: Info.name, email: Info.email, password: Info.password, location: Info.location })
+            });
+            const temp = await response.json();
+            // console.log(temp);
+            if (temp.success) {
+                navigate("/login");
+            } else {
+                alert("Enter valid credentials");
+            }
         }
     }
 
@@ -55,7 +103,7 @@ export default function Register() {
                         <input type="text" placeholder="Location" required name="location" value={Info.location} onChange={OnChange} />
                     </div>
                     <br></br>
-                    <button type="submit">Register</button>
+                    <button type="submit" >Register</button>
                 </form>
             </div>
         </>

@@ -29,7 +29,7 @@ router.post('/creatuser', [
             password: secPassword,
             location : req.body.location
         });
-        console.log(newUser);
+        // console.log(newUser);
         await newUser.save();
         res.json({ success: true });
     } catch (error) {
@@ -79,6 +79,8 @@ router.post('/loginuser', [
         res.status(500).send("Server Error");
     }
 });
+
+
 
 
 module.exports = router;

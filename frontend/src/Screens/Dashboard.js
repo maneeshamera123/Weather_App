@@ -43,10 +43,6 @@ export default function Dashboard() {
         navigate('/');
     };
 
-    const ShowNotification = () => {
-        navigate('/alert');
-    };
-
    
     if (loading) {
         return <div>Loading...</div>;
@@ -61,7 +57,6 @@ export default function Dashboard() {
                         <p>Weather App</p>
                     </div>
                     <div className="navbar-buttons">
-                        <button className='loginbutton' onClick={ShowNotification}>Tap to see Notification</button>
                         <button className='signupbutton' onClick={LogoutHandler}>Logout</button>
                     </div>
                 </div>
