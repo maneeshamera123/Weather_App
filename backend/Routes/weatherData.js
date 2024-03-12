@@ -50,8 +50,9 @@ router.post('/save-token', async (req, res) => {
   }
 });
 
-router.post('/send-notification', async (req, res) => {
 
+//with the help of token admin can send notification to all users
+router.post('/send-notification', async (req, res) => {
  const token = await saveToken.find({});
 //  console.log(token[0].location)
 const response = await axios.get(`http://api.weatherapi.com/v1/forecast.json?key=dc6b7772fa134eda80660624241003&q=${token[0].location}`);
