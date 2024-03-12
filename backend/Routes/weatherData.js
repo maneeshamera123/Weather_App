@@ -1,14 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/usermodel');
 const axios =  require('axios');
-const { body, validationResult } = require('express-validator');
-
-const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
-
 const db = require("../db")
-const mongoose=require('mongoose')
 
 router.get('/weather', async (req, res) => {
   const token = req.headers.authorization;
@@ -44,7 +38,6 @@ router.use(bodyParser.json());
 
 router.post('/save-token', async (req, res) => {
   try {
-    const token = req.body.token;
     const newToken = new tokenForNotification({
       token: req.body.token,
       location: req.body.location

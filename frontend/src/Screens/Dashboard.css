@@ -1,34 +1,101 @@
 .container {
-    max-width: 100%; 
-    margin: 0 auto;
-    padding: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly; 
-  }
-  
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.city-card {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 0 10px 20px 10px;
+  text-align: center;
+  width: calc(50% - 20px); 
+}
+
+.city-card h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.city-card p {
+  margin-bottom: 5px;
+}
+
+.city-card img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
   .city-card {
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin: 0 10px 20px 10px; 
-    text-align: center;
     width: calc(50% - 20px); 
   }
-  
-  .city-card h2 {
-    font-size: 20px;
+}
+
+@media (max-width: 576px) {
+  .city-card {
+    width: calc(100% - 20px); 
+  }
+
+  .search-bar input[type="text"] {
+    width: 100%;
+    margin-right: 0;
+  }
+}
+
+
+/* Search bar CSS */
+.search-bar {
+  margin-top: 10px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar input[type="text"] {
+  width: 500px;
+  padding: 5px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+.search-bar button {
+  width: 80px;
+  padding: 6px 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background-color: #45a049;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar input[type="text"] {
+    width: 100%;
+    margin-right: 0;
     margin-bottom: 10px;
   }
-  
-  .city-card p {
-    margin-bottom: 5px;
+
+  .search-bar button {
+    width: 100%;
   }
-  
-  .city-card img {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 10px;
-  }
-  
+}

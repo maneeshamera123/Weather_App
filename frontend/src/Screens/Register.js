@@ -38,7 +38,7 @@ export default function Register() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ token , location:Info.location}),
+                body: JSON.stringify({token , location:Info.location}),
             });
     
             if (response.ok) {
