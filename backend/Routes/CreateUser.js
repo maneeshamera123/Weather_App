@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const User = require('../models/usermodel');
@@ -5,7 +6,7 @@ const { body, validationResult } = require('express-validator');
 
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
-const jwtSec = "€486745896€$@fdhhsgpbkjhYUVYUDTYh"
+const jwtSec = process.env.JWTSCE;
 
 const db = require("../db")
 
