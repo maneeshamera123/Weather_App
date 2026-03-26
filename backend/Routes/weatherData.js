@@ -1,8 +1,12 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const axios =  require('axios');
 const jwt = require("jsonwebtoken");
 const db = require("../db")
+
+const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 router.get('/weather', async (req, res) => {
   const token = req.headers.authorization;
@@ -12,10 +16,10 @@ router.get('/weather', async (req, res) => {
   }
 
   try {
-    const decoded = jwt.verify(token, 'your-secret-key');
+    const decoded = jwt.verify(token, JWT_SECRET_KEY);
     const uuid = decoded.uuid;
 
-    const response = await axios.get(`http://api.weatherapi.com/v1/current.json?key=dc6b7772fa134eda80660624241003&q=${uuid}`);
+    const response = await axios.get(`http://api.weatherapi.com/v1/current.json?key=${WEATHER_API_KEY}&q=${uuid}`);
 
     res.json(response.data);
   } catch (error) {
@@ -28,11 +32,20 @@ const bodyParser = require('body-parser');
 const admin = require('firebase-admin');
 const tokenForNotification = require('../models/saveToken');
 
-const serviceAccount = require('../weatherapp-69015-firebase-adminsdk-lecml-5a3cb0bc86.json');
-const saveToken = require('../models/saveToken');
-
+// Firebase Admin SDK configuration from environment variables
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert({
+    type: process.env.FIREBASE_TYPE,
+    project_id: process.env.FIREBASE_PROJECT_ID,
+    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+    private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    client_id: process.env.FIREBASE_CLIENT_ID,
+    auth_uri: process.env.FIREBASE_AUTH_URI,
+    token_uri: process.env.FIREBASE_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_CERT_URL,
+    client_x509_cert_url: process.env.FIREBASE_CLIENT_CERT_URL,
+  })
 });
 router.use(bodyParser.json());
 
@@ -55,7 +68,7 @@ router.post('/save-token', async (req, res) => {
 router.post('/send-notification', async (req, res) => {
  const token = await saveToken.find({});
 //  console.log(token[0].location)
-const response = await axios.get(`http://api.weatherapi.com/v1/forecast.json?key=dc6b7772fa134eda80660624241003&q=${token[0].location}`);
+const response = await axios.get(`http://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}&q=${token[0].location}`);
 // console.log(response)
 // res.send(response.data.forecast.forecastday[0].day)
 const maxWindSpeed=response.data.forecast.forecastday[0].day.maxwind_mph

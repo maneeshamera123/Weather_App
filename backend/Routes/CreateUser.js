@@ -72,7 +72,7 @@ router.post('/loginuser', [
         };
 
         const authToken = jwt.sign(payload, jwtSec);
-        const uuidToken = jwt.sign({ uuid: user.location }, 'your-secret-key');
+        const uuidToken = jwt.sign({ uuid: user.location }, process.env.JWT_SECRET_KEY);
 
         res.json({ success: true, authToken , uuidToken});
     } catch (error) {

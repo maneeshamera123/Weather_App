@@ -1,2 +1,3 @@
 node_modules/*
 .env
+weatherapp-69015-firebase-adminsdk*.json
