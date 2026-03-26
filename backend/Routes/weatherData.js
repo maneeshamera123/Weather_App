@@ -86,6 +86,23 @@ router.get('/weather-by-city', async (req, res) => {
   }
 });
 
+// Public endpoint for homepage weather display (no auth required)
+router.get('/public-weather', async (req, res) => {
+  const { city } = req.query;
+  
+  if (!city) {
+    return res.status(400).json({ message: 'City parameter is required' });
+  }
+
+  try {
+    const response = await axios.get(`http://api.weatherapi.com/v1/current.json?key=${WEATHER_API_KEY}&q=${city}`);
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching public weather:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 //with the help of token admin can send notification to all users
 router.post('/send-notification', async (req, res) => {
  const token = await saveToken.find({});
