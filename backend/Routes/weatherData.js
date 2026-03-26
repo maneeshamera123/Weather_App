@@ -63,6 +63,28 @@ router.post('/save-token', async (req, res) => {
   }
 });
 
+// Route to get weather by city name (for search functionality)
+router.get('/weather-by-city', async (req, res) => {
+  const { city } = req.query;
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  if (!city) {
+    return res.status(400).json({ message: 'City parameter is required' });
+  }
+
+  try {
+    jwt.verify(token, JWT_SECRET_KEY);
+    const response = await axios.get(`http://api.weatherapi.com/v1/current.json?key=${WEATHER_API_KEY}&q=${city}`);
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching weather by city:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 //with the help of token admin can send notification to all users
 router.post('/send-notification', async (req, res) => {

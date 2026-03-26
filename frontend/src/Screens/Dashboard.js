@@ -19,9 +19,19 @@ export default function Dashboard() {
     const searchHandler = async () => {
         try {
             if (City.city) {
-                const response = await axios.get(`http://api.weatherapi.com/v1/current.json?key=dc6b7772fa134eda80660624241003&q=${City.city}`);
-                const data = response.data;
-                setWeatherData(data);
+                const response = await fetch(`http://localhost:5000/api/weather-by-city?city=${encodeURIComponent(City.city)}`, {
+                    method: 'GET',
+                    headers: {
+                        'authorization': localStorage.getItem("uuidToken")
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setWeatherData(data);
+                } else {
+                    throw new Error('Failed to fetch weather data');
+                }
             }
         } catch (error) {
             console.error('Error fetching weather data:', error);
