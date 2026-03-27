@@ -16,7 +16,7 @@ export default function Dashboard() {
         if (!City.city) return;
         setSearchLoading(true);
         try {
-            const response = await fetch(`http://localhost:5000/api/weather-by-city?city=${encodeURIComponent(City.city)}`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/weather-by-city?city=${encodeURIComponent(City.city)}`, {
                 method: 'GET',
                 headers: {
                     'authorization': localStorage.getItem("uuidToken")
@@ -39,7 +39,7 @@ export default function Dashboard() {
 
     const fetchWeatherData = async () => {
         try {
-            const res = await fetch("http://localhost:5000/api/weather", {
+            const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/weather`, {
                 method: 'GET',
                 headers: {
                     'authorization': localStorage.getItem("uuidToken")

@@ -9,7 +9,7 @@ export default function Home() {
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/public-weather?city=Bangalore');
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/public-weather?city=Bangalore`);
         if (!response.ok) throw new Error('Failed to fetch weather');
         const data = await response.json();
         setWeatherData(data);
