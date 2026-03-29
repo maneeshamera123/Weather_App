@@ -5,14 +5,18 @@ import { getToken } from "firebase/messaging";
 
 export default function Register() {
     async function requestPermission() {
-        const permission = await Notification.requestPermission();
-        if (permission === "granted") {
-            const token = await getToken(messaging, {
-                vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY,
-            });
-            sendTokenToServer(token);
-        } else if (permission === "denied") {
-            alert("You denied for the notification");
+        try {
+            const permission = await Notification.requestPermission();
+            if (permission === "granted") {
+                const token = await getToken(messaging, {
+                    vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY,
+                });
+                await sendTokenToServer(token);
+            } else if (permission === "denied") {
+                alert("You denied notifications. You won't receive weather alerts.");
+            }
+        } catch (error) {
+            console.error('Error requesting notification permission:', error);
         }
     }
 
@@ -40,7 +44,6 @@ export default function Register() {
     }
 
     const submitHandler = async (e) => {
-        requestPermission();
         e.preventDefault();
         if (Info.password !== Info.ConfirmPassword) {
             alert("Password doesn't match")
@@ -48,6 +51,8 @@ export default function Register() {
         else {
             setIsLoading(true);
             try {
+                await requestPermission();
+                
                 const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/creatuser`, {
                     method: "POST",
                     headers: {
