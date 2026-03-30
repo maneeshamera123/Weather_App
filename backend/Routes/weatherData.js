@@ -52,6 +52,7 @@ router.use(bodyParser.json());
 router.post('/save-token', async (req, res) => {
   try {
     const newToken = new tokenForNotification({
+      userId: req.body.userId,
       token: req.body.token,
       location: req.body.location
     });

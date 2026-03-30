@@ -32,7 +32,7 @@ router.post('/creatuser', [
         });
         // console.log(newUser);
         await newUser.save();
-        res.json({ success: true });
+        res.json({ success: true, userId: newUser.id });
     } catch (error) {
         console.log(error);
         res.status(500).json({ success: false });

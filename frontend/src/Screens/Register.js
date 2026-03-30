@@ -4,14 +4,14 @@ import { messaging } from "../firebase";
 import { getToken } from "firebase/messaging";
 
 export default function Register() {
-    async function requestPermission() {
+    async function requestPermission(userId) {
         try {
             const permission = await Notification.requestPermission();
             if (permission === "granted") {
                 const token = await getToken(messaging, {
                     vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY,
                 });
-                await sendTokenToServer(token);
+                await sendTokenToServer(token, userId);
             } else if (permission === "denied") {
                 alert("You denied notifications. You won't receive weather alerts.");
             }
@@ -24,14 +24,14 @@ export default function Register() {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
-    async function sendTokenToServer(token) {
+    async function sendTokenToServer(token, userId) {
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/save-token`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({token , location:Info.location}),
+                body: JSON.stringify({ userId, token, location: Info.location }),
             });
             if (response.ok) {
                 console.log('Token sent to server successfully');
@@ -51,8 +51,6 @@ export default function Register() {
         else {
             setIsLoading(true);
             try {
-                await requestPermission();
-                
                 const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/creatuser`, {
                     method: "POST",
                     headers: {
@@ -62,6 +60,7 @@ export default function Register() {
                 });
                 const temp = await response.json();
                 if (temp.success) {
+                    await requestPermission(temp.userId);
                     navigate("/login");
                 } else {
                     alert("Enter valid credentials");
