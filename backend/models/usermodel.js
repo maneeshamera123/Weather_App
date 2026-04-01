@@ -17,6 +17,10 @@ const userSchema = new Schema({
     location:{
       type: String,
       required: true
+    },
+    lastNotificationSent: {
+      type: Date,
+      default: null
     }
   });
 

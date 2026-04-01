@@ -14,13 +14,23 @@ app.get('/', cors(), async (req, res) => {
 
 const userRouter = require('./Routes/CreateUser');
 const WeatherData = require('./Routes/weatherData');
-// const saveToken = require('./Routes/notification');
+const { startWeatherAlertScheduler, checkWeatherAndNotifyAllUsers } = require('./services/weatherAlertScheduler');
 
 app.use(express.json());
 app.use('/api', userRouter);
 app.use('/api', WeatherData);
-// app.use('/api', saveToken);
+
+app.post('/api/test-weather-alert', async (req, res) => {
+    try {
+        await checkWeatherAndNotifyAllUsers();
+        res.json({ success: true, message: 'Weather check completed. Check server logs for details.' });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+startWeatherAlertScheduler();
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+    console.log(`Example app listening on port ${port}`)
 });
