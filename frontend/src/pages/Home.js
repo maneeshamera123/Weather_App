@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../Components/Navbar';
+import { weatherService } from '../services/api';
 
 export default function Home() {
   const [weatherData, setWeatherData] = useState(null);
@@ -9,9 +10,7 @@ export default function Home() {
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/public-weather?city=Bangalore`);
-        if (!response.ok) throw new Error('Failed to fetch weather');
-        const data = await response.json();
+        const data = await weatherService.getPublicWeather('Bangalore');
         setWeatherData(data);
       } catch (err) {
         setError(err.message);

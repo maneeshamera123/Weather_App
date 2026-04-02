@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { messaging } from "../firebase";
 import { getToken } from "firebase/messaging";
+import { authService, tokenService } from '../services/api';
 
 export default function Register() {
     async function requestPermission(userId) {
@@ -26,13 +27,7 @@ export default function Register() {
 
     async function sendTokenToServer(token, userId) {
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/save-token`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userId, token, location: Info.location }),
-            });
+            const response = await tokenService.saveToken({ userId, token, location: Info.location });
             if (response.ok) {
                 console.log('Token sent to server successfully');
             } else {
@@ -51,16 +46,14 @@ export default function Register() {
         else {
             setIsLoading(true);
             try {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/creatuser`, {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ name: Info.name, email: Info.email, password: Info.password, location: Info.location })
+                const response = await authService.register({
+                    name: Info.name,
+                    email: Info.email,
+                    password: Info.password,
+                    location: Info.location
                 });
-                const temp = await response.json();
-                if (temp.success) {
-                    await requestPermission(temp.userId);
+                if (response.success) {
+                    await requestPermission(response.userId);
                     navigate("/login");
                 } else {
                     alert("Enter valid credentials");

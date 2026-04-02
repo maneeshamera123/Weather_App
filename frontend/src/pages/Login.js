@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { authService } from '../services/api';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -10,18 +11,11 @@ export default function Login() {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/loginuser`, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email: Info.email, password: Info.password })
-            });
-            const temp = await response.json();
-            if (temp.success) {
+            const response = await authService.login({ email: Info.email, password: Info.password });
+            if (response.success) {
                 localStorage.setItem("userEmail", Info.email);
-                localStorage.setItem("authToken", temp.authToken);
-                localStorage.setItem("uuidToken", temp.uuidToken);
+                localStorage.setItem("authToken", response.authToken);
+                localStorage.setItem("uuidToken", response.uuidToken);
                 navigate("/dashboard");
             } else {
                 alert("Enter valid credentials");

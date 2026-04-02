@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { weatherService } from '../services/api';
 
 export default function Dashboard() {
     const [City, setCity] = useState({ city: "" });
@@ -16,19 +17,8 @@ export default function Dashboard() {
         if (!City.city) return;
         setSearchLoading(true);
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/weather-by-city?city=${encodeURIComponent(City.city)}`, {
-                method: 'GET',
-                headers: {
-                    'authorization': localStorage.getItem("uuidToken")
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setWeatherData(data);
-            } else {
-                throw new Error('Failed to fetch weather data');
-            }
+            const data = await weatherService.getWeatherByCity(City.city, localStorage.getItem("uuidToken"));
+            setWeatherData(data);
         } catch (error) {
             console.error('Error fetching weather data:', error);
             alert('Failed to fetch weather data. Please try again.');
@@ -39,19 +29,8 @@ export default function Dashboard() {
 
     const fetchWeatherData = async () => {
         try {
-            const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/weather`, {
-                method: 'GET',
-                headers: {
-                    'authorization': localStorage.getItem("uuidToken")
-                }
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                setWeatherData(data);
-            } else {
-                throw new Error('Failed to fetch weather data');
-            }
+            const data = await weatherService.getWeather(localStorage.getItem("uuidToken"));
+            setWeatherData(data);
         } catch (error) {
             console.error('Error fetching weather data:', error);
         } finally {
