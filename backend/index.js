@@ -9,25 +9,8 @@ const port = process.env.PORT || 5000;
 const cors = require('cors');
 app.use(cors());
 
-<<<<<<< Updated upstream
-app.get('/', cors(), async (req, res) => {
-    res.send("Hello world")
-});
-
-const userRouter = require('./Routes/CreateUser');
-const WeatherData = require('./Routes/weatherData');
-// const saveToken = require('./Routes/notification');
-
-app.use(express.json());
-app.use('/api', userRouter);
-app.use('/api', WeatherData);
-// app.use('/api', saveToken);
-
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
-=======
-const authRoutes = require('./routes/authRoutes');
-const weatherRoutes = require('./routes/weatherRoutes');
+const authRoutes = require('./Routes/authRoutes');
+const weatherRoutes = require('./Routes/weatherRoutes');
 const { startWeatherAlertScheduler, checkWeatherAndNotifyAllUsers } = require('./services/weatherAlertScheduler');
 
 app.use(express.json());
@@ -52,5 +35,4 @@ startWeatherAlertScheduler();
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
->>>>>>> Stashed changes
 });
